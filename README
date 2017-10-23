@@ -1,1 +1,59 @@
-Insects and Plants
+Insects and Plants Game
+
+By Jeremy Su, Ian Mao, and Max Tung
+
+Technologies used: Python (add game libraries if used)
+
+
+Purpose: Create a game with Python where Insects are used to eat Plants
+
+/////////////////////////////////////////////////////////////////////
+//*******************      DESIGN      ****************************//
+/////////////////////////////////////////////////////////////////////
+
+A user will place insects on a game board in a strategic way that will
+let the insects eat all the plants in the allotted time.
+
+///////////////////// What is an insect? ///////////////////////////
+
+An insect can be one of a Bee, an Ant, or a Praying Mantis.
+
+Bee: a Bee can eat flowers only. It moves at a speed of 1 in a vertical
+pattern
+
+Ant: an Ant can eat leaves. It moves at a speed of 2 in a horizontal pattern
+
+Praying Mantis: a Praying mantis can eat any type of plant and moves at a
+speed of 4 in a diagonal pattern
+
+
+////////////////////// What is a Plant? /////////////////////////////
+
+A plant is either a flower or a leaf. It starts in a specific place on the
+board. Plants do not move.
+
+Flower: Bees and Praying Mantises eat flowers
+
+Leaf: Ants and Praying Mantises eat leaves
+
+A user wins if all plants are eaten.
+
+
+/////////////////////////////////////////////////////////////////////////
+//************************ Implementation *****************************//
+/////////////////////////////////////////////////////////////////////////
+
+There will be three main classes: Game class, Board class, and Insect class
+
+Game class: Holds all the necessary concurrency locks, as well as both the
+Board class and all Insect class instances
+
+Board class: Controls the state of the board and draws the state at every
+game loop
+
+Insect class: contains information about the type of insect and controls
+its movement. It also tells the board where to place itself. Each insect 
+instance will run its code in a separate thread.
+
+
+
