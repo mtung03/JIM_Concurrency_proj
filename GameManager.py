@@ -34,6 +34,10 @@ class GameManager(object):
         RandomRow = random.randint(0, size - 1)      #Dropping the bee in
         RandomColumn = random.randint(0, size - 1)
         self.Bee = Bee("Bee", RandomColumn, RandomRow, size, self.Locks)
+        RandomRow = random.randint(0, size - 1)      #Dropping the bee in
+        RandomColumn = random.randint(0, size - 1)
+        self.Bird = Bird("Bird", RandomColumn, RandomRow, size)
+        self.Bird.thread.start()
 
     def update(self):
         for Column in range(self.size):      
@@ -45,11 +49,17 @@ class GameManager(object):
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
                     elif self.Grid[Column][Row][i].Name == "Bee":
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
+                    elif self.Grid[Column][Row][i].Name == "Bird":
+                        self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
         # when the bee pollinates a flower
         if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name == "flower":
             self.Grid[int(self.Bee.Column)][int(self.Bee.Row)] = self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][:-1]
             self.Bee.Points += 1
             print self.Bee.Points
         self.Grid[int(self.Bee.Column)][int(self.Bee.Row)].append(self.Bee)
+
+        if self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "flower":
+            self.Grid[int(self.Bird.Column)][int(self.Bird.Row)] = self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][:-1]
+        self.Grid[int(self.Bird.Column)][int(self.Bird.Row)].append(self.Bird)
 
 
