@@ -21,22 +21,22 @@ class GameManager(object):
 
         for Row in range(size):     # Filling grid with grass
             for Column in range(size):
-                TempTile = MapTile("ground", Column, Row)
+                TempTile = MapTile("GROUND", Column, Row)
                 self.Grid[Column][Row].append(TempTile)
 
         for i in range(20):            # Placing random flowers on the map
             randomRow = random.randint(0, size - 1)
             randomCol = random.randint(0, size - 1)
         # print ("row: %i, col: %i" %(randomRow, randomCol))
-            TempTile = MapTile("flower", randomRow, randomCol)
+            TempTile = MapTile("FLOWER", randomRow, randomCol)
             self.Grid[randomRow][randomCol].append(TempTile)
 
         RandomRow = random.randint(0, size - 1)      #Dropping the bee in
         RandomColumn = random.randint(0, size - 1)
-        self.Bee = Bee("Bee", RandomColumn, RandomRow, size, self.Locks)
+        self.Bee = Bee("BEE", RandomColumn, RandomRow, size, self.Locks)
         RandomRow = random.randint(0, size - 1)      #Dropping the bee in
         RandomColumn = random.randint(0, size - 1)
-        self.Bird = Bird("Bird", RandomColumn, RandomRow, size)
+        self.Bird = Bird("BIRD", RandomColumn, RandomRow, size)
         self.Bird.thread.start()
 
     def update(self):
@@ -47,18 +47,18 @@ class GameManager(object):
                 for i in range(len(self.Grid[Column][Row])):
                     if self.Grid[Column][Row][i].Column != Column:
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
-                    elif self.Grid[Column][Row][i].Name == "Bee":
+                    elif self.Grid[Column][Row][i].Name == "BEE":
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
-                    elif self.Grid[Column][Row][i].Name == "Bird":
+                    elif self.Grid[Column][Row][i].Name == "BIRD":
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
         # when the bee pollinates a flower
-        if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name == "flower":
+        if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name == "FLOWER":
             self.Grid[int(self.Bee.Column)][int(self.Bee.Row)] = self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][:-1]
             self.Bee.Points += 1
             print self.Bee.Points
         self.Grid[int(self.Bee.Column)][int(self.Bee.Row)].append(self.Bee)
 
-        if self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "flower":
+        if self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "FLOWER":
             self.Grid[int(self.Bird.Column)][int(self.Bird.Row)] = self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][:-1]
         self.Grid[int(self.Bird.Column)][int(self.Bird.Row)].append(self.Bird)
 
