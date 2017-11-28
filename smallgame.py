@@ -52,7 +52,10 @@ while not Done:
         if event.type == pygame.QUIT:
             Done = True
         elif event.type == pygame.KEYDOWN:
-            gm.Bee.move(KeyLookup[event.key])
+            try:
+                gm.Bee.move(KeyLookup[event.key])
+            except KeyError:
+                continue
 
     for Row in range(MapSize):           # Drawing grid
         for Column in range(MapSize):
