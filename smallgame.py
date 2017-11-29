@@ -33,7 +33,7 @@ gm = GameManager(MapSize)
 while not gm.Lost:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            gm.stopBirds()
+            gm.stopThreads()
             pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYDOWN:
@@ -54,5 +54,5 @@ while not gm.Lost:
     pygame.display.flip()
     gm.update()
 
-gm.stopBirds()
+gm.stopThreads()
 pygame.quit()

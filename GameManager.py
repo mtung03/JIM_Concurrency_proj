@@ -37,21 +37,19 @@ class GameManager(object):
         RandomRow = random.randint(0, size - 1)      #Dropping the bee in
         RandomColumn = random.randint(0, size - 1)
      
+
         self.Bee = Bee("BEE", RandomColumn, RandomRow, size, self.Locks)
 
-        RandomRow = random.randint(0, size - 1)      #Dropping the bird in
-        RandomColumn = random.randint(0, size - 1)
 
 
-        self.Bird = Bird("BIRD", RandomColumn, RandomRow, size)
-        self.Bird.start()
+        self.Birds = [Bird("BIRD", random.randint(0, size - 1), random.randint(0, size - 1), size) for i in range (3)]
+        self.Toads = [Toad("TOAD", random.randint(0, size - 1), random.randint(0, size - 1), size, self.Bee) for i in range (1)]
 
-        RandomRow = random.randint(0, size - 1)      #Dropping the toad in
-        RandomColumn = random.randint(0, size - 1)
+        for bird in self.Birds:
+            bird.start()
 
-      
-        self.Toad = Toad("TOAD", RandomColumn, RandomRow, size, self.Bee)
-        self.Toad.start()
+        for toad in self.Toads:
+            toad.start()
 
 
     def update(self):
@@ -78,23 +76,37 @@ class GameManager(object):
         self.Grid[int(self.Bee.Column)][int(self.Bee.Row)].append(self.Bee)
 
         # when bird hits bee player lost
-        if self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "BEE":
-            self.Lost = True
+        
         #elif self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "TOAD":
-            
-        self.Grid[int(self.Bird.Column)][int(self.Bird.Row)].append(self.Bird)
+        
   
         # when toad hits flower just overwrite
-        if self.Grid[int(self.Toad.Column)][int(self.Toad.Row)][-1].Name == "BEE":
-            self.Lost = True
-        self.Grid[int(self.Toad.Column)][int(self.Toad.Row)].append(self.Toad)
+        
+
+        for bird in self.Birds:
+            if self.Grid[int(bird.Column)][int(bird.Row)][-1].Name == "BEE":
+                self.Lost = True
+                break;
+            self.Grid[int(bird.Column)][int(bird.Row)].append(bird)
+
+
+        for toad in self.Toads:
+            if self.Grid[int(toad.Column)][int(toad.Row)][-1].Name == "BEE":
+                self.Lost = True
+                break;
+            self.Grid[int(toad.Column)][int(toad.Row)].append(toad)
+        
+        
   
 
 
 
-    def stopBirds(self):
-        self.Toad.stop()
-        self.Bird.stop()
+    def stopThreads(self):
+        for bird in self.Birds:
+            bird.stop()
+
+        for toad in self.Toads:
+            toad.stop()
 
 
 
