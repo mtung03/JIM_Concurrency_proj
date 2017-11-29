@@ -9,6 +9,7 @@ class MapTile(object):
         self.Column = Column
         self.Row = Row
 
+
 class GameManager(object):
     def __init__(self, size):
         self.size = size
@@ -18,12 +19,12 @@ class GameManager(object):
             self.Grid.append([])
             for Column in range(size):
                 self.Grid[Row].append([])
-
+        
         for Row in range(size):     # Filling grid with grass
             for Column in range(size):
                 TempTile = MapTile("GROUND", Column, Row)
                 self.Grid[Column][Row].append(TempTile)
-
+        
         for i in range(20):            # Placing random flowers on the map
             randomRow = random.randint(0, size - 1)
             randomCol = random.randint(0, size - 1)

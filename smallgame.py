@@ -35,7 +35,10 @@ while True:
             pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            gm.Bee.move(KeyLookup[event.key])
+            try:
+                gm.Bee.move(KeyLookup[event.key])
+            except KeyError:
+                continue
     for Row in range(MapSize):           # Drawing grid
         for Column in range(MapSize):
             img = Images[gm.Grid[Column][Row][-1].Name]
@@ -48,3 +51,5 @@ while True:
     clock.tick(60)
     pygame.display.flip()
     gm.update()
+
+pygame.quit()
