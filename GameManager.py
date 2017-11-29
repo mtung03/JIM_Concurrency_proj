@@ -55,7 +55,6 @@ class GameManager(object):
         if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name == "FLOWER":
             self.Grid[int(self.Bee.Column)][int(self.Bee.Row)] = self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][:-1]
             self.Bee.Points += 1
-            print self.Bee.Points
         self.Grid[int(self.Bee.Column)][int(self.Bee.Row)].append(self.Bee)
 
         if self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "FLOWER":

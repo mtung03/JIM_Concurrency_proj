@@ -1,59 +1,57 @@
-Insects and Plants Game
+BeeAndPlants Game
 
 By Jeremy Su, Ian Mao, and Max Tung 
 
-Technologies used: Python (add game libraries if used)
+Technologies used: Python and Pygame framework
 
 
-Purpose: Create a game with Python where Insects are used to eat Plants
+Purpose: Create a concurrent game with Python where the player controls
+a bee that tries to pollinate all flowers scattered on the map while
+dodging the birds that are hunting for it. 
 
 /////////////////////////////////////////////////////////////////////
 //*******************      DESIGN      ****************************//
 /////////////////////////////////////////////////////////////////////
 
-A user will place insects on a game board in a strategic way that will
-let the insects eat all the plants in the allotted time.
+The game starts with 20 flowers, a bee and certain amount of brids randomly
+placed on the map. The player controls the movement of the bee, and
+the birds move swiftly in a random manner. After the bee successfully 
+pollinates a flower, the flower will disappear and the player gets one
+point. If the bee gets eaten by a bird, the game is over. 
 
-///////////////////// What is an insect? ///////////////////////////
+///////////////////// What is a bee? ///////////////////////////
 
-An insect can be one of a Bee, an Ant, or a Praying Mantis.
+A bee has the goal of pollinating all flowers on the map while
+avoiding to be eaten by the birds. 
 
-Bee: a Bee can eat flowers only. It moves at a speed of 1 in a vertical
-pattern
+////////////////////// What is a flower? /////////////////////////////
 
-Ant: an Ant can eat leaves. It moves at a speed of 2 in a horizontal pattern
+A flower stands for one point for the player if successfully pollinated
+by the bee. A user wins if all flowers are pollinated.
 
-Praying Mantis: a Praying mantis can eat any type of plant and moves at a
-speed of 4 in a diagonal pattern
+////////////////////// What is a bird? /////////////////////////////
 
-
-////////////////////// What is a Plant? /////////////////////////////
-
-A plant is either a flower or a leaf. It starts in a specific place on the
-board. Plants do not move.
-
-Flower: Bees and Praying Mantises eat flowers
-
-Leaf: Ants and Praying Mantises eat leaves
-
-A user wins if all plants are eaten.
-
+bird is the object the bee is trying not to clash into on the map because
+birds eat the bee and the player wil lose.
 
 /////////////////////////////////////////////////////////////////////////
 //************************ Implementation *****************************//
 /////////////////////////////////////////////////////////////////////////
 
-There will be three main classes: Game class, Board class, and Insect class
+There will be three main modules: Bee module, Bird module, GameManager module,
+and smallgame, which is the main module. 
 
-Game class: Holds all the necessary concurrency locks, as well as both the
-Board class and all Insect class instances
+Bee module: has the Bee class that contains all info of a bee object
+and a move function defines how a bee will move on the map.
 
-Board class: Controls the state of the board and draws the state at every
-game loop
+Bird module: has the bird class that has the info of a bird. It also
+has functions to ensure that all birds run on their own threads.
 
-Insect class: contains information about the type of insect and controls
-its movement. It also tells the board where to place itself. Each insect 
-instance will run its code in a separate thread.
+GameManager module: contains the state of the game and how the game board
+will be updated.
+
+smallgame module: contains the main loop of the game, and draws the map
+based on the state it's in.
 
 
 
