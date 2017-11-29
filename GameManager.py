@@ -2,6 +2,7 @@ import random
 import threading
 from Bee import Bee
 from Bird import Bird
+from Toad import Toad
 
 class MapTile(object):
     def __init__(self, Name, Column, Row):
@@ -35,14 +36,22 @@ class GameManager(object):
 
         RandomRow = random.randint(0, size - 1)      #Dropping the bee in
         RandomColumn = random.randint(0, size - 1)
+     
         self.Bee = Bee("BEE", RandomColumn, RandomRow, size, self.Locks)
 
-        RandomRow = random.randint(0, size - 1)      #Dropping the bee in
+        RandomRow = random.randint(0, size - 1)      #Dropping the bird in
         RandomColumn = random.randint(0, size - 1)
 
 
         self.Bird = Bird("BIRD", RandomColumn, RandomRow, size)
         self.Bird.start()
+
+        RandomRow = random.randint(0, size - 1)      #Dropping the toad in
+        RandomColumn = random.randint(0, size - 1)
+
+      
+        self.Toad = Toad("TOAD", RandomColumn, RandomRow, size, self.Bee)
+        self.Toad.start()
 
 
     def update(self):
@@ -56,6 +65,8 @@ class GameManager(object):
                     elif self.Grid[Column][Row][i].Name == "BEE":
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
                     elif self.Grid[Column][Row][i].Name == "BIRD":
+                        self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
+                    elif self.Grid[Column][Row][i].Name == "TOAD":
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
                 
         # when the bee pollinates a flower overwrite and add to points
@@ -71,9 +82,18 @@ class GameManager(object):
             self.Lost = True
         self.Grid[int(self.Bird.Column)][int(self.Bird.Row)].append(self.Bird)
   
+        # when toad hits flower just overwrite
+        if self.Grid[int(self.Toad.Column)][int(self.Toad.Row)][-1].Name == "FLOWER":
+            self.Grid[int(self.Toad.Column)][int(self.Toad.Row)] = self.Grid[int(self.Toad.Column)][int(self.Toad.Row)][:-1]
+        elif self.Grid[int(self.Toad.Column)][int(self.Toad.Row)][-1].Name == "BEE":
+            self.Lost = True
+        self.Grid[int(self.Toad.Column)][int(self.Toad.Row)].append(self.Toad)
+  
+
 
 
     def stopBirds(self):
+        self.Toad.stop()
         self.Bird.stop()
 
 

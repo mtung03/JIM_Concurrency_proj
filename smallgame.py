@@ -17,7 +17,8 @@ Images = {
     "FLOWER" : pygame.transform.scale(pygame.image.load("flower.png"), (TileWidth, TileHeight)),
     "BEE"    : pygame.transform.scale(pygame.image.load("bee.png"), (TileWidth, TileHeight)),
     "BIRD"   : pygame.transform.scale(pygame.image.load("bird.png"), (TileWidth, TileHeight)),
-    "GROUND" : pygame.transform.scale(pygame.image.load("ground.png"), (TileWidth, TileHeight))
+    "GROUND" : pygame.transform.scale(pygame.image.load("ground.png"), (TileWidth, TileHeight)),
+    "TOAD" : pygame.transform.scale(pygame.image.load("toad.png"), (TileWidth, TileHeight))
 }
 
 KeyLookup = {
@@ -53,4 +54,5 @@ while not gm.Lost:
     pygame.display.flip()
     gm.update()
 
+gm.stopBirds()
 pygame.quit()
