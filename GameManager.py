@@ -35,10 +35,14 @@ class GameManager(object):
         RandomRow = random.randint(0, size - 1)      #Dropping the bee in
         RandomColumn = random.randint(0, size - 1)
         self.Bee = Bee("BEE", RandomColumn, RandomRow, size, self.Locks)
+
         RandomRow = random.randint(0, size - 1)      #Dropping the bee in
         RandomColumn = random.randint(0, size - 1)
+
+
         self.Bird = Bird("BIRD", RandomColumn, RandomRow, size)
-        self.Bird.thread.start()
+        self.Bird.start()
+
 
     def update(self):
         for Column in range(self.size):      
@@ -61,5 +65,9 @@ class GameManager(object):
         if self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "FLOWER":
             self.Grid[int(self.Bird.Column)][int(self.Bird.Row)] = self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][:-1]
         self.Grid[int(self.Bird.Column)][int(self.Bird.Row)].append(self.Bird)
+
+    def stopBirds(self):
+        self.Bird.stop()
+
 
 
