@@ -14,6 +14,7 @@ class GameManager(object):
     def __init__(self, size):
         self.size = size
         self.Grid = []
+        self.Lost = False
         self.Locks = [[threading.Lock for x in range(size)] for y in range(size)]
         for Row in range(size):     # Creating grid
             self.Grid.append([])
@@ -56,15 +57,21 @@ class GameManager(object):
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
                     elif self.Grid[Column][Row][i].Name == "BIRD":
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
-        # when the bee pollinates a flower
+                
+        # when the bee pollinates a flower overwrite and add to points
         if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name == "FLOWER":
             self.Grid[int(self.Bee.Column)][int(self.Bee.Row)] = self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][:-1]
             self.Bee.Points += 1
         self.Grid[int(self.Bee.Column)][int(self.Bee.Row)].append(self.Bee)
 
+        # when bird hits flower just overwrite
         if self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "FLOWER":
             self.Grid[int(self.Bird.Column)][int(self.Bird.Row)] = self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][:-1]
+        elif self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "BEE":
+            self.Lost = True
         self.Grid[int(self.Bird.Column)][int(self.Bird.Row)].append(self.Bird)
+  
+
 
     def stopBirds(self):
         self.Bird.stop()

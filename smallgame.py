@@ -29,8 +29,7 @@ KeyLookup = {
 
 gm = GameManager(MapSize)
 
-
-while True:
+while not gm.Lost:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gm.stopBirds()
