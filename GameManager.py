@@ -85,9 +85,7 @@ class GameManager(object):
         self.Grid[int(self.Bird.Column)][int(self.Bird.Row)].append(self.Bird)
   
         # when toad hits flower just overwrite
-        if self.Grid[int(self.Toad.Column)][int(self.Toad.Row)][-1].Name == "FLOWER":
-            self.Grid[int(self.Toad.Column)][int(self.Toad.Row)] = self.Grid[int(self.Toad.Column)][int(self.Toad.Row)][:-1]
-        elif self.Grid[int(self.Toad.Column)][int(self.Toad.Row)][-1].Name == "BEE":
+        if self.Grid[int(self.Toad.Column)][int(self.Toad.Row)][-1].Name == "BEE":
             self.Lost = True
         self.Grid[int(self.Toad.Column)][int(self.Toad.Row)].append(self.Toad)
   
