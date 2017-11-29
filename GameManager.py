@@ -75,10 +75,8 @@ class GameManager(object):
             self.Bee.Points += 1
         self.Grid[int(self.Bee.Column)][int(self.Bee.Row)].append(self.Bee)
 
-        # when bird hits flower just overwrite
-        if self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "FLOWER":
-            self.Grid[int(self.Bird.Column)][int(self.Bird.Row)] = self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][:-1]
-        elif self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "BEE":
+        # when bird hits bee player lost
+        if self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "BEE":
             self.Lost = True
         self.Grid[int(self.Bird.Column)][int(self.Bird.Row)].append(self.Bird)
   

@@ -26,7 +26,7 @@ class Bird(threading.Thread):
             elif Direction == 3: # DOWN
                 if self.Row < self.MapSize-1:
                     self.Row += 1
-            time.sleep(0.5)
+            time.sleep(0.2)
 
     def stop(self):
         self.StopEvent.set()
