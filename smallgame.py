@@ -8,7 +8,7 @@ pygame.init()
 Screen = pygame.display.set_mode([600, 600])
 clock = pygame.time.Clock()
 MapSize = 20
-
+Screen.fill([255, 255, 255])
 TileWidth = 25
 TileHeight = 25
 TileMargin = 5
