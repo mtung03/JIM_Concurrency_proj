@@ -59,7 +59,8 @@ class GameManager(object):
             for Row in range(self.size):
                 # going through the list in each slot to check
                 # if there's any internal conflicts
-                for i in range(len(self.Grid[Column][Row])):
+                i = 0
+                while i < len(self.Grid[Column][Row]):
                     if self.Grid[Column][Row][i].Column != Column:
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
                     elif self.Grid[Column][Row][i].Name == "BEE":
@@ -68,6 +69,7 @@ class GameManager(object):
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
                     elif self.Grid[Column][Row][i].Name == "TOAD":
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
+                    i += 1
                 
         # when the bee pollinates a flower overwrite and add to points
         if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name == "FLOWER":
@@ -78,6 +80,8 @@ class GameManager(object):
         # when bird hits bee player lost
         if self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "BEE":
             self.Lost = True
+        #elif self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "TOAD":
+            
         self.Grid[int(self.Bird.Column)][int(self.Bird.Row)].append(self.Bird)
   
         # when toad hits flower just overwrite
