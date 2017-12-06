@@ -12,11 +12,10 @@ class MapTile(object):
 
 
 class GameManager(object):
-    def __init__(self, size):
+    def __init__(self, size, numBirds, numToads):
         self.size = size
         self.Grid = []
         self.State = 0 #0 = running, -1 = lost, 1 = won
-        self.Locks = [[threading.Lock for x in range(size)] for y in range(size)]
         for Row in range(size):     # Creating grid
             self.Grid.append([])
             for Column in range(size):
@@ -38,12 +37,13 @@ class GameManager(object):
         RandomColumn = random.randint(0, size - 1)
      
 
-        self.Bee = Bee("BEE", RandomColumn, RandomRow, size, self.Locks)
+        #self.Bee = Bee("BEE", RandomColumn, RandomRow, size) #place bee randomly
+        self.Bee = Bee("BEE", size / 2, size / 2, size)
 
 
 
-        self.Birds = [Bird("BIRD", random.randint(0, size - 1), random.randint(0, size - 1), size) for i in range (4)]
-        self.Toads = [Toad("TOAD", random.randint(0, size - 1), random.randint(0, size - 1), size, self.Bee) for i in range (1)]
+        self.Birds = [Bird("BIRD", random.randint(0, size - 1), random.randint(0, size - 1), size) for i in range (numBirds)]
+        self.Toads = [Toad("TOAD", random.randint(0, size - 1), random.randint(0, size - 1), size, self.Bee) for i in range (numToads)]
 
         for bird in self.Birds:
             bird.start()
@@ -77,13 +77,6 @@ class GameManager(object):
                 self.State = 1
         self.Grid[int(self.Bee.Column)][int(self.Bee.Row)].append(self.Bee)
 
-        # when bird hits bee player lost
-        
-        #elif self.Grid[int(self.Bird.Column)][int(self.Bird.Row)][-1].Name == "TOAD":
-        
-  
-        # when toad hits flower just overwrite
-        
 
         for bird in self.Birds:
             if self.Grid[int(bird.Column)][int(bird.Row)][-1].Name == "BEE":

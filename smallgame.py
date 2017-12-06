@@ -2,14 +2,14 @@ import pygame
 import sys
 import random
 import threading
-import time
 from GameManager import GameManager
 
 Screen = pygame.display.set_mode([600, 600])
 clock = pygame.time.Clock()
 MapSize = 20
 Screen.fill([255, 255, 255])
-
+numBirds = 5
+numToads = 1
 Colors = {
     "red"   : (255, 0, 0),
     "black" : (0, 0, 0),
@@ -59,7 +59,7 @@ def gameLoop(gm):
                         gameExit = True
                     if event.key == pygame.K_c:
                         Screen.fill(Colors["white"])
-                        gameLoop(GameManager(MapSize))
+                        gameLoop(GameManager(MapSize, numBirds, numToads))
         elif gm.State == 1:
             Screen.fill(Colors["white"])
             changeScreen("You Win!", Colors["green"], 0, 0, 60)
@@ -72,7 +72,7 @@ def gameLoop(gm):
                         gameExit = True
                     if event.key == pygame.K_c:
                         Screen.fill(Colors["white"])
-                        gameLoop(GameManager(MapSize))
+                        gameLoop(GameManager(MapSize, numBirds, numToads))
         else: #main game loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -91,11 +91,24 @@ def gameLoop(gm):
                                         TileHeight])
                     Screen.blit(img, ((TileMargin + TileWidth) * Column + TileMargin, 
                                   (TileMargin + TileHeight) * Row + TileMargin))
-            clock.tick(60)
+            clock.tick(60) #frames per second
             pygame.display.update()
             gm.update()
 
     gm.stopThreads()
     pygame.quit()
 
-gameLoop(GameManager(MapSize))
+def main(args):
+    global numBirds, numToads
+    if len(args) > 2:
+        print args
+        numBirds = int(args[1])
+        numToads = int(args[2])
+    gameLoop(GameManager(MapSize, numBirds, numToads))
+
+if __name__ == '__main__':
+    main(sys.argv)
+
+
+
+

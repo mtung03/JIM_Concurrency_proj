@@ -1,11 +1,10 @@
 import threading
 class Bee(object):
-    def __init__(self, Name, Row, Column, MapSize, Locks):
+    def __init__(self, Name, Row, Column, MapSize):
         self.Name = Name
         self.Row = Row
         self.Column = Column
         self.Points = 0
-        self.Locks = Locks
         self.MapSize = MapSize
         self.bee_loc = (0, 0)
         self.bee_loc_mutex = threading.Lock()
