@@ -13,19 +13,27 @@ class Bird(threading.Thread):
 
     def run(self):
         while not self.stopped():
-            Direction = random.randint(0, 4)
+            Direction = random.randint(0, 3)
             if Direction == 0: # UP
                 if self.Row > 0:
                     self.Row -= 1
+                # else:
+                #     Direction = 3
             elif Direction == 1: # LEFT
                 if self.Column > 0:
                     self.Column -= 1
+                # else:
+                #     Direction = 2
             elif Direction == 2: # RIGHT
                 if self.Column < self.MapSize-1:
-                    self.Column+= 1
+                    self.Column += 1
+                # else:
+                #     Direction = 1
             elif Direction == 3: # DOWN
                 if self.Row < self.MapSize-1:
                     self.Row += 1
+                # else:
+                #     Direction = 0
             time.sleep(0.2)
 
     def stop(self):
@@ -33,5 +41,3 @@ class Bird(threading.Thread):
 
     def stopped(self):
         return self.StopEvent.isSet()
-
-    

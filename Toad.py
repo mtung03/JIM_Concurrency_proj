@@ -27,7 +27,7 @@ class Toad(threading.Thread):
             elif Direction[1] == 1: # RIGHT
                 if self.Column < self.MapSize-1:
                     self.Column += 1
-            time.sleep(0.5)
+            time.sleep(0.3)
 
     def get_direction(self):
         with self.Bee.bee_loc_mutex:
@@ -49,5 +49,3 @@ class Toad(threading.Thread):
 
     def stopped(self):
         return self.StopEvent.isSet()
-
-    

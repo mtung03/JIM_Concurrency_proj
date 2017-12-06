@@ -42,7 +42,7 @@ class GameManager(object):
 
 
 
-        self.Birds = [Bird("BIRD", random.randint(0, size - 1), random.randint(0, size - 1), size) for i in range (3)]
+        self.Birds = [Bird("BIRD", random.randint(0, size - 1), random.randint(0, size - 1), size) for i in range (8)]
         self.Toads = [Toad("TOAD", random.randint(0, size - 1), random.randint(0, size - 1), size, self.Bee) for i in range (1)]
 
         for bird in self.Birds:
