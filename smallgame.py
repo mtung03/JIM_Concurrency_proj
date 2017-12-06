@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 import threading
+import time
 from GameManager import GameManager
 
 Screen = pygame.display.set_mode([600, 600])
@@ -33,53 +34,54 @@ KeyLookup = {
     pygame.K_UP     : "UP"
 }
 
-def gameOver(msg, color):
-    font = pygame.font.Font(None, 40)
+def gameOver(msg, color, offset_x, offset_y, size):
+    font = pygame.font.SysFont("headlinea", size)
     text = font.render(msg, True, color)  
     text_rect = text.get_rect()
-    text_x = Screen.get_width() / 2 - text_rect.width / 2
-    text_y = Screen.get_height() / 2 - text_rect.height / 2    
+    text_x = Screen.get_width() / 2 - text_rect.width / 2 + offset_x
+    text_y = Screen.get_height() / 2 - text_rect.height / 2  + offset_y  
     Screen.blit(text, [text_x, text_y])
 
-def gameLoop():
+def gameLoop(gm):
     pygame.init()
-    gm = GameManager(MapSize)
     gameExit = False  
-    while not gameExit:
+    while not gameExit: #game lost
         if gm.Lost:
             Screen.fill(Colors["white"])
-            gameOver("Game Over", Colors["red"])
+            gameOver("Game Over", Colors["red"], 0, 0, 60)
+            gameOver("Press q to quit, c to try again", Colors["black"], 15, 80, 20)
             pygame.display.update()
-
+            gm.stopThreads()
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
                         gameExit = True
-                    # if event.key == pygame.K_c:
-                    #     gameLoop()
-        
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                gameExit = True
-            elif event.type == pygame.KEYDOWN:
-                try:
-                    gm.Bee.move(KeyLookup[event.key])
-                except KeyError:
-                    continue
-        for Row in range(MapSize):           # Drawing grid
-            for Column in range(MapSize):
-                img = Images[gm.Grid[Column][Row][-1].Name]
-                Screen.fill(Colors["white"], [(TileMargin + TileWidth) * Column + TileMargin,
+                    if event.key == pygame.K_c:
+                        Screen.fill(Colors["white"])
+                        gameLoop(GameManager(MapSize))
+        else: #main game loop
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    gameExit = True
+                elif event.type == pygame.KEYDOWN:
+                    try:
+                        gm.Bee.move(KeyLookup[event.key])
+                    except KeyError:
+                        continue
+            for Row in range(MapSize):           # Drawing grid
+                for Column in range(MapSize):
+                    img = Images[gm.Grid[Column][Row][-1].Name]
+                    Screen.fill(Colors["white"], [(TileMargin + TileWidth) * Column + TileMargin,
                                         (TileMargin + TileHeight) * Row + TileMargin,
                                         TileWidth,
                                         TileHeight])
-                Screen.blit(img, ((TileMargin + TileWidth) * Column + TileMargin, 
+                    Screen.blit(img, ((TileMargin + TileWidth) * Column + TileMargin, 
                                   (TileMargin + TileHeight) * Row + TileMargin))
-        clock.tick(60)
-        pygame.display.update()
-        gm.update()
+            clock.tick(60)
+            pygame.display.update()
+            gm.update()
 
     gm.stopThreads()
     pygame.quit()
 
-gameLoop()
+gameLoop(GameManager(MapSize))
