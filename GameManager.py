@@ -15,7 +15,7 @@ class GameManager(object):
     def __init__(self, size):
         self.size = size
         self.Grid = []
-        self.Lost = False
+        self.State = 0 #0 = running, -1 = lost, 1 = won
         self.Locks = [[threading.Lock for x in range(size)] for y in range(size)]
         for Row in range(size):     # Creating grid
             self.Grid.append([])
@@ -73,6 +73,8 @@ class GameManager(object):
         if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name == "FLOWER":
             self.Grid[int(self.Bee.Column)][int(self.Bee.Row)] = self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][:-1]
             self.Bee.Points += 1
+            if self.Bee.Points >= 20:
+                self.State = 1
         self.Grid[int(self.Bee.Column)][int(self.Bee.Row)].append(self.Bee)
 
         # when bird hits bee player lost
@@ -85,14 +87,14 @@ class GameManager(object):
 
         for bird in self.Birds:
             if self.Grid[int(bird.Column)][int(bird.Row)][-1].Name == "BEE":
-                self.Lost = True
+                self.State = -1
                 break;
             self.Grid[int(bird.Column)][int(bird.Row)].append(bird)
 
 
         for toad in self.Toads:
             if self.Grid[int(toad.Column)][int(toad.Row)][-1].Name == "BEE":
-                self.Lost = True
+                self.State = -1
                 break;
             self.Grid[int(toad.Column)][int(toad.Row)].append(toad)
         

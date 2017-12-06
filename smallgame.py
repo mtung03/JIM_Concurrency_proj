@@ -13,7 +13,8 @@ Screen.fill([255, 255, 255])
 Colors = {
     "red"   : (255, 0, 0),
     "black" : (0, 0, 0),
-    "white" : (255, 255, 255)
+    "white" : (255, 255, 255),
+    "green" : (50, 205, 50)
 }
 
 TileWidth = 25
@@ -34,7 +35,7 @@ KeyLookup = {
     pygame.K_UP     : "UP"
 }
 
-def gameOver(msg, color, offset_x, offset_y, size):
+def changeScreen(msg, color, offset_x, offset_y, size):
     font = pygame.font.SysFont("headlinea", size)
     text = font.render(msg, True, color)  
     text_rect = text.get_rect()
@@ -46,10 +47,23 @@ def gameLoop(gm):
     pygame.init()
     gameExit = False  
     while not gameExit: #game lost
-        if gm.Lost:
+        if gm.State == -1:
             Screen.fill(Colors["white"])
-            gameOver("Game Over", Colors["red"], 0, 0, 60)
-            gameOver("Press q to quit, c to try again", Colors["black"], 15, 80, 20)
+            changeScreen("Game Over", Colors["red"], 0, 0, 60)
+            changeScreen("Press q to quit, c to try again", Colors["black"], 15, 80, 20)
+            pygame.display.update()
+            gm.stopThreads()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        gameExit = True
+                    if event.key == pygame.K_c:
+                        Screen.fill(Colors["white"])
+                        gameLoop(GameManager(MapSize))
+        elif gm.State == 1:
+            Screen.fill(Colors["white"])
+            changeScreen("You Win!", Colors["green"], 0, 0, 60)
+            changeScreen("Press q to quit, c to try again", Colors["black"], 15, 80, 20)
             pygame.display.update()
             gm.stopThreads()
             for event in pygame.event.get():
