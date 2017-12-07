@@ -1,3 +1,14 @@
+#
+"""
+ Jeremy Su, Ian Mao, Max Tung - Team JIM
+ 12/7/17
+ Comp 50CP
+
+ This module represents the Game Manager that keeps track of all the enemy
+ threads, the player Bee object, flower placements, and the grid that each
+ thread traverses. The game manager is the class that determines if the
+ Bee collides with a Toad or Bird, and if a Bee lands on a flower.
+"""
 import random
 import threading
 from Bee import Bee
@@ -5,6 +16,10 @@ from Bird import Bird
 from Toad import Toad
 
 class MapTile(object):
+    """
+    Represents a base tile of the grid. The name of this tile should either be
+    FLOWER or GROUND
+    """
     def __init__(self, Name, Column, Row):
         self.Name = Name
         self.Column = Column
@@ -12,51 +27,73 @@ class MapTile(object):
 
 
 class GameManager(object):
+    """
+    The game manager contains fields for its size, its state of whether or not
+    the game is won, lost, or running, and a Grid to keep track of everything.
+    The grid is a 2D list where each slot contains layers. For example, a flower
+    tile can be placed on top of a ground tile, so when a flower is collected,
+    the ground tile is still there.
+    """
     def __init__(self, size, numBirds, numToads):
         self.size = size
         self.Grid = []
-        self.State = 0 #0 = running, -1 = lost, 1 = won
-        for Row in range(size):     # Creating grid
+        self.State = 0 # 0 = running, -1 = lost, 1 = won
+        for Row in range(size): # Creating grid
             self.Grid.append([])
             for Column in range(size):
                 self.Grid[Row].append([])
         
-        for Row in range(size):     # Filling grid with grass
+        for Row in range(size):     # Filling grid with ground tiles
             for Column in range(size):
                 TempTile = MapTile("GROUND", Column, Row)
                 self.Grid[Column][Row].append(TempTile)
         
-        for i in range(20):            # Placing random flowers on the map
+        for i in range(20):            # Placing random flowers tiles on the map
             randomRow = random.randint(0, size - 1)
             randomCol = random.randint(0, size - 1)
-        # print ("row: %i, col: %i" %(randomRow, randomCol))
             TempTile = MapTile("FLOWER", randomRow, randomCol)
             self.Grid[randomRow][randomCol].append(TempTile)
 
-        RandomRow = random.randint(0, size - 1)      #Dropping the bee in
-        RandomColumn = random.randint(0, size - 1)
-     
+        self.Bee = Bee("BEE", size / 2, size / 2, size) # Bee placed in center
 
-        #self.Bee = Bee("BEE", RandomColumn, RandomRow, size) #place bee randomly
-        self.Bee = Bee("BEE", size / 2, size / 2, size)
-
-
-
-        self.Birds = [Bird("BIRD", random.randint(0, size - 1), random.randint(0, size - 1), size) for i in range (numBirds)]
-        self.Toads = [Toad("TOAD", random.randint(0, size - 1), random.randint(0, size - 1), size, self.Bee) for i in range (numToads)]
-
+        # initialize all enemy threads
+        self.Birds = [Bird("BIRD", self.randomSpot(), self.randomSpot(), size) 
+                                                    for i in range (numBirds)]
+        self.Toads = [Toad("TOAD", self.randomSpot(), self.randomSpot(), size, 
+                                          self.Bee) for i in range (numToads)]
+        # start all enemy threads
         for bird in self.Birds:
             bird.start()
-
         for toad in self.Toads:
             toad.start()
 
+    def randomSpot(self):
+        """Returns a random position within the bounds of the grid
+     
+        Args:
+            Nothing
+  
+        Returns:
+            A random number between 0 and size of grid
+        """
+        return random.randint(0, self.size - 1)
+
 
     def update(self):
+        """Goes through the entire grid, removes every Bee, Bird, and Toad,
+           and detects collisions such as Bee with Flower, or Bird/Toad with Bee
+           then places them back onto the grid
+     
+        Args:
+            Nothing
+  
+        Returns:
+            Nothing
+        """
+
+        # removes all moving entities on the grid
         for Column in range(self.size):      
             for Row in range(self.size):
-                # going through the list in each slot to check
-                # if there's any internal conflicts
                 i = 0
                 while i < len(self.Grid[Column][Row]):
                     if self.Grid[Column][Row][i].Column != Column:
@@ -69,25 +106,25 @@ class GameManager(object):
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
                     i += 1
                 
-        # when the bee pollinates a flower overwrite and add to points
+        # if layer under the bee is a flower, remove it and add points
         if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name == "FLOWER":
             self.Grid[int(self.Bee.Column)][int(self.Bee.Row)] = self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][:-1]
             self.Bee.Points += 1
-            if self.Bee.Points >= 20:
+            if self.Bee.Points >= 20: # wins game
                 self.State = 1
+
+        # add everything back onto the grid
         self.Grid[int(self.Bee.Column)][int(self.Bee.Row)].append(self.Bee)
-
-
         for bird in self.Birds:
             if self.Grid[int(bird.Column)][int(bird.Row)][-1].Name == "BEE":
-                self.State = -1
+                self.State = -1 # lost game
                 break;
             self.Grid[int(bird.Column)][int(bird.Row)].append(bird)
 
 
         for toad in self.Toads:
             if self.Grid[int(toad.Column)][int(toad.Row)][-1].Name == "BEE":
-                self.State = -1
+                self.State = -1 # lost game
                 break;
             self.Grid[int(toad.Column)][int(toad.Row)].append(toad)
         
@@ -97,6 +134,14 @@ class GameManager(object):
 
 
     def stopThreads(self):
+        """Stops every bird/toad threads
+     
+        Args:
+            Nothing
+  
+        Returns:
+            Nothing
+        """
         for bird in self.Birds:
             bird.stop()
 
