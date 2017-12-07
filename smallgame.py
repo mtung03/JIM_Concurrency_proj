@@ -106,9 +106,12 @@ def gameLoop(gm):
             Screen.fill(Colors["white"])
 
             # display Game Over
-            changeScreen("Game Over", Colors["red"], 0, 0, 60)
+            changeScreen("Game Over", Colors["red"], 0, -20, 60)
             changeScreen("Press q to quit, c to try again", 
-                                Colors["black"], 15, 80, 20)
+                                Colors["black"], 15, 60, 20)
+            num_points = str(gm.Bee.Points)
+            changeScreen("You collected " + num_points + " flowers!", 
+                                Colors["black"], 0, 70, 22)
             pygame.display.update()
             gm.stopThreads()
             for event in pygame.event.get():
@@ -122,9 +125,9 @@ def gameLoop(gm):
             Screen.fill(Colors["white"])
 
             # display You Win!
-            changeScreen("You Win!", Colors["green"], 0, 0, 60)
+            changeScreen("You Win!", Colors["green"], 0, -20, 60)
             changeScreen("Press q to quit, c to try again", 
-                                Colors["black"], 15, 80, 20)
+                                Colors["black"], 15, 60, 20)
             pygame.display.update()
             gm.stopThreads()
             for event in pygame.event.get():
