@@ -107,8 +107,10 @@ class GameManager(object):
                     i += 1
                 
         # if layer under the bee is a flower, remove it and add points
-        if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name == "FLOWER":
-            self.Grid[int(self.Bee.Column)][int(self.Bee.Row)] = self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][:-1]
+        if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name 
+                                                                    == "FLOWER":
+            self.Grid[int(self.Bee.Column)][int(self.Bee.Row)] = 
+                         self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][:-1]
             self.Bee.Points += 1
             if self.Bee.Points >= 20: # wins game
                 self.State = 1
