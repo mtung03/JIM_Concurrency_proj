@@ -100,6 +100,7 @@ class GameManager(object):
                     elif self.Grid[Column][Row][i].Name == "TOAD":
                         self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
                     i += 1
+                    
 
     def update(self):
         """Goes through the entire grid, removes every Bee, Bird, and Toad,

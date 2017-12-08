@@ -89,6 +89,28 @@ def changeScreen(msg, color, offset_x, offset_y, size):
     text_y = Screen.get_height() / 2 - text_rect.height / 2  + offset_y  
     Screen.blit(text, [text_x, text_y])
 
+def drawRow(gm, Row):
+    """Draws a row in pygame according to its given Row and the given game
+       manager object
+     
+    Args:
+        gm: the game manager to draw from
+        Row: the row this thread is drawing
+  
+    Returns:
+        Nothing
+    """
+    for Column in range(MapSize):
+                img = Images[gm.Grid[Column][Row][-1].Name]
+                Screen.fill(Colors["white"], 
+                            [(TileMargin + TileWidth) * Column + TileMargin,
+                                (TileMargin + TileHeight) * Row + TileMargin,
+                                                      TileWidth, TileHeight])
+                Screen.blit(img, 
+                            ((TileMargin + TileWidth) * Column + TileMargin, 
+                            (TileMargin + TileHeight) * Row + TileMargin))
+
+
 def gameLoop(gm):
     """Main game loop of the game that takes parses user input, displays
        updates and steps the game.
@@ -146,16 +168,14 @@ def gameLoop(gm):
                         gm.Bee.move(KeyLookup[event.key]) # move the bee
                     except KeyError:
                         continue
-            for Row in range(MapSize):           # Drawing grid
-                for Column in range(MapSize):
-                    img = Images[gm.Grid[Column][Row][-1].Name]
-                    Screen.fill(Colors["white"], 
-                                [(TileMargin + TileWidth) * Column + TileMargin,
-                                   (TileMargin + TileHeight) * Row + TileMargin,
-                                                         TileWidth, TileHeight])
-                    Screen.blit(img, 
-                                ((TileMargin + TileWidth) * Column + TileMargin, 
-                                  (TileMargin + TileHeight) * Row + TileMargin))
+            # draws grid using a thread for each row
+            threads = [threading.Thread(target = drawRow, args = [gm, i])
+                        for i in range(MapSize)]
+            for thread in threads:
+                thread.start()
+            for thread in threads:
+                thread.join()
+
             clock.tick(60) # frames per second
             pygame.display.update() # update the display
             gm.update() # update the game manager
