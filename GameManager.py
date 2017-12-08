@@ -78,6 +78,28 @@ class GameManager(object):
         """
         return random.randint(0, self.size - 1)
 
+    def deleteRow(self, Row):
+        """Goes through every column in the given row and removes any moving
+           entity
+     
+        Args:
+            Row: row number this thread is in charge of processing
+  
+        Returns:
+            Nothing
+        """
+        for Column in range(self.size):
+                i = 0
+                while i < len(self.Grid[Column][Row]):
+                    if self.Grid[Column][Row][i].Column != Column:
+                        self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
+                    elif self.Grid[Column][Row][i].Name == "BEE":
+                        self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
+                    elif self.Grid[Column][Row][i].Name == "BIRD":
+                        self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
+                    elif self.Grid[Column][Row][i].Name == "TOAD":
+                        self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
+                    i += 1
 
     def update(self):
         """Goes through the entire grid, removes every Bee, Bird, and Toad,
@@ -91,25 +113,18 @@ class GameManager(object):
             Nothing
         """
 
-        # removes all moving entities on the grid
-        for Column in range(self.size):      
-            for Row in range(self.size):
-                i = 0
-                while i < len(self.Grid[Column][Row]):
-                    if self.Grid[Column][Row][i].Column != Column:
-                        self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
-                    elif self.Grid[Column][Row][i].Name == "BEE":
-                        self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
-                    elif self.Grid[Column][Row][i].Name == "BIRD":
-                        self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
-                    elif self.Grid[Column][Row][i].Name == "TOAD":
-                        self.Grid[Column][Row].remove(self.Grid[Column][Row][i])
-                    i += 1
-                
-        # if layer under the bee is a flower, remove it and add points
-        if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name 
+        # launches threads for each row to remove moving entities concurrently
+        threads = [threading.Thread(target = self.deleteRow, args = [i]) 
+                                              for i in range(self.size)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+        
+        # evaluate game rules - ex) if a bee is on a flower, remove the flower
+        if self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][-1].Name \
                                                                     == "FLOWER":
-            self.Grid[int(self.Bee.Column)][int(self.Bee.Row)] = 
+            self.Grid[int(self.Bee.Column)][int(self.Bee.Row)] = \
                          self.Grid[int(self.Bee.Column)][int(self.Bee.Row)][:-1]
             self.Bee.Points += 1
             if self.Bee.Points >= 20: # wins game
