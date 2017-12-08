@@ -32,7 +32,7 @@ import random
 import threading
 from GameManager import GameManager
 
-Screen = pygame.display.set_mode([600, 600])
+Screen = pygame.display.set_mode([800, 800])
 clock = pygame.time.Clock() # helps with keeping track of time
 MapSize = 20
 Screen.fill([255, 255, 255])
@@ -45,9 +45,9 @@ Colors = {
     "green" : (50, 205, 50)
 }
 
-TileWidth = 25
-TileHeight = 25
-TileMargin = 5
+TileWidth = 33
+TileHeight = 33
+TileMargin = 7
 
 Images = {
     "FLOWER" : pygame.transform.scale(
@@ -128,12 +128,12 @@ def gameLoop(gm):
             Screen.fill(Colors["white"])
 
             # display Game Over
-            changeScreen("Game Over", Colors["red"], 0, -20, 60)
+            changeScreen("Game Over", Colors["red"], 0, -20, 80)
             changeScreen("Press q to quit, c to try again", 
-                                Colors["black"], 15, 60, 20)
+                                Colors["black"], 0, 50, 30)
             num_points = str(gm.Bee.Points)
             changeScreen("You collected " + num_points + " flowers!", 
-                                Colors["black"], 0, 70, 22)
+                                Colors["black"], 0, 90, 32)
             pygame.display.update()
             gm.stopThreads()
             for event in pygame.event.get():
@@ -147,9 +147,9 @@ def gameLoop(gm):
             Screen.fill(Colors["white"])
 
             # display You Win!
-            changeScreen("You Win!", Colors["green"], 0, -20, 60)
+            changeScreen("You Win!", Colors["green"], 0, -20, 80)
             changeScreen("Press q to quit, c to try again", 
-                                Colors["black"], 15, 60, 20)
+                                Colors["black"], 15, 60, 30)
             pygame.display.update()
             gm.stopThreads()
             for event in pygame.event.get():
